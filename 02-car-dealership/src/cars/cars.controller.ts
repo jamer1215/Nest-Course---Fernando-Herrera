@@ -5,6 +5,8 @@ import { CreateCarDto } from './dto/create-car.dto';
 //CONTROLADOR: El que escuchará la solicitud de los clientes - POSTMAN y el controlador emite respuesta
 @Controller('cars')//especificamente maneja cars - es el endpoint
 //@UsePipes(ValidationPipe)//hermano, es mejor que uses la vaina a nivel de controlador en forma general para que apliques el pat. diseño DRY - pa no andar copiando y pegando la misma vaina en los demas métodos
+//ES MÁS, DEFINELO A NIVEL GLOBAL DE TODA LA APP, NO SOLO PARA ESTE CONTROLER DE LOS CARS POR FAVOR --> S49
+
 export class CarsController {
 
     constructor(//tipo lo del charmander - nest crea las instancias automatico
