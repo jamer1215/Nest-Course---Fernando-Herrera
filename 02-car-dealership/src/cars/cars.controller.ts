@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post,} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post, UsePipes, ValidationPipe,} from '@nestjs/common';
 import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 
 //CONTROLADOR: El que escuchará la solicitud de los clientes - POSTMAN y el controlador emite respuesta
 @Controller('cars')//especificamente maneja cars - es el endpoint
+//@UsePipes(ValidationPipe)//hermano, es mejor que uses la vaina a nivel de controlador en forma general para que apliques el pat. diseño DRY - pa no andar copiando y pegando la misma vaina en los demas métodos
 export class CarsController {
 
     constructor(//tipo lo del charmander - nest crea las instancias automatico
@@ -57,6 +58,8 @@ export class CarsController {
 
     //S47: Data Transfer Object - objeto que sirve para transferir una data en distintas piezas en la app como tal
     @Post()
+    //@UsePipes(ValidationPipe)//S48: ESTAMOS USANDO UN PIPE PARTICULAR
+    //instalamos en la terminal para la S48:yarn add class-validator class-transformer
     createCar(@Body() createCarDto:CreateCarDto){//el parametro bodysito (lo llame asi pq quise xd) es para obtener la data de la petición post - lo que puse en la parte de Body en el postman
         //S47: Cambie del tipo de dato any de bodisito a uno de CreateCarDTO Y AHORA BODISITO se llama: createCaDto.
         //nota: hasta S47 en postman si pongo en el body modeL y/o atributos demas no lo valida pq no he implementado validaciones
