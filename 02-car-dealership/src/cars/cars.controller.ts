@@ -3,6 +3,7 @@ import { CarsService } from './cars.service';
 import { CreateCarDto } from './dto/create-car.dto';
 
 //CONTROLADOR: El que escuchará la solicitud de los clientes - POSTMAN y el controlador emite respuesta
+//NO MANEJA LA LOGICA DEL NEGOCIO
 @Controller('cars')//especificamente maneja cars - es el endpoint
 //@UsePipes(ValidationPipe)//hermano, es mejor que uses la vaina a nivel de controlador en forma general para que apliques el pat. diseño DRY - pa no andar copiando y pegando la misma vaina en los demas métodos
 //ES MÁS, DEFINELO A NIVEL GLOBAL DE TODA LA APP, NO SOLO PARA ESTE CONTROLER DE LOS CARS POR FAVOR --> S49
@@ -65,11 +66,13 @@ export class CarsController {
     createCar(@Body() createCarDto:CreateCarDto){//el parametro bodysito (lo llame asi pq quise xd) es para obtener la data de la petición post - lo que puse en la parte de Body en el postman
         //S47: Cambie del tipo de dato any de bodisito a uno de CreateCarDTO Y AHORA BODISITO se llama: createCaDto.
         //nota: hasta S47 en postman si pongo en el body modeL y/o atributos demas no lo valida pq no he implementado validaciones
-        return{
+       /* return{
             // ok:true,
             // method: 'POST'
             createCarDto //regresame el body de la peticion que hice en mi postman
-        }
+        }*/
+
+        return this.carsService.create(createCarDto)//retorname el método que defini en el servicio - tarea S50
 
     }
     

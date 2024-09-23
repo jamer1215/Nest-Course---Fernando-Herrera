@@ -1,9 +1,11 @@
 //S38: clase comun y corriente con la peculiaridad de que se puede inyectar
 //todo servicio es un provider, mas no viceversa necesariamente
+//MANEJA LA LOGICA DEL NEGOCIO
 
 import { Get, Injectable, NotFoundException, Param } from '@nestjs/common';
 import { Car } from './interfaces/car.interfaces';//importamos la interface car
 import { v4 as uuid} from 'uuid'//importamos una funcion que genera UUIDs
+import { CreateCarDto } from './dto/create-car.dto';
 
 //decorador - dice que clase es inyectable
 @Injectable()
@@ -50,4 +52,19 @@ export class CarsService {
         }
         return car; // Si lo encuentra, devuelve el auto
     }
+
+// Implementamos el método create - TAREA
+   create(createCarDto: CreateCarDto) {
+      // Generamos un nuevo ID UUID
+      const newCar = {
+          id: uuid(), // Generar un ID único con UUID v4
+          ...createCarDto // Desestructuramos las propiedades del DTO (brand, model) sino definelo uno por uno
+       };
+
+       // Añadimos el nuevo carro a la lista de carros
+       this.cars.push(newCar);
+
+       // Retornamos el nuevo carro creado
+       return newCar;
+  }
 }
