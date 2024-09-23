@@ -2,23 +2,25 @@
 //todo servicio es un provider, mas no viceversa necesariamente
 
 import { Get, Injectable, NotFoundException, Param } from '@nestjs/common';
+import { Car } from './interfaces/car.interfaces';//importamos la interface car
+import { v4 as uuid} from 'uuid'//importamos una funcion que genera UUIDs
 
 //decorador - dice que clase es inyectable
 @Injectable()
 export class CarsService {
-    private cars = [//array de "listas"
+    private cars: Car[] = [//array de "objetos" del tipo interface Car
         {
-            id: 1,
+            id: uuid(),//cambiandolo
             brand: 'Toyota',
             model: 'Corolla',
         },
         {
-            id: 2,
+            id: uuid(),
             brand: 'Honda',
             model: 'Civic',
         },
         {
-            id: 3,
+            id: uuid(),
             brand: 'Jeep',
             model: 'Cherokee',
         },
@@ -29,7 +31,7 @@ export class CarsService {
     }
 
 
-    findOneById(id: number) {
+    findOneById(id: string) {
         const car = this.cars.find(car => car.id === id); // Busca el auto con id: find() es una función de los arreglos de JavaScript
         // que se utiliza para encontrar el primer elemento de un arreglo que cumpla una condición.
         //Este método recibe una función de callback que será ejecutada para cada elemento del arreglo. 

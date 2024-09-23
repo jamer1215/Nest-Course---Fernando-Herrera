@@ -26,7 +26,8 @@ export class CarsController {
    
      @Get('/:id')
      //ParseIntPipe - es un Pipe que lo que hace es transformar la vaina en un numero y si me pasa otro dato lanza una exception del tipo BadRequest
-    getCarById(@Param('id', ParseIntPipe) id: number){//revisar la parte del pdf: Extraer info de la solicitud (request) - en este caso le digo a nest lee el id que puse en el postman tipo : .../cars/1
+    getCarById(@Param('id') id: string){//revisar la parte del pdf: Extraer info de la solicitud (request) - en este caso le digo a nest lee el id que puse en el postman tipo : .../cars/1
+        //borre lo del parsePipeInt pq ahora que estoy trabajando con UUIDS no recibiré enteros
         console.log({ id });//imprimirlo como número - lo del +id
         // const carId = parseInt(id); // Convertir el parámetro a número
         // const car = this.cars[carId]; // Buscar el auto por índice
