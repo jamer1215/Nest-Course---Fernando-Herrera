@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Patch, Post, UsePipes, ValidationPipe,} from '@nestjs/common';
 import { CarsService } from './cars.service';
-import { CreateCarDto } from './dto/create-car.dto';
+import { CreateCarDto, UpdateCarDto } from './dto';//englobado en el archivo index para mas comodidad
+
 
 //CONTROLADOR: El que escuchará la solicitud de los clientes - POSTMAN y el controlador emite respuesta
 //NO MANEJA LA LOGICA DEL NEGOCIO
@@ -77,20 +78,15 @@ export class CarsController {
     }
     
     @Patch('/:id')//pa actualizar datos - recuerda que para saber que actualizaré debo buscar/indicar el id
-    updateCar(@Param ('id',ParseIntPipe) id:number,//el metodo tambien puede recibir como parametro el id
-        @Body() bodysito:any){//el parametro bodysito (lo llame asi pq quise xd) es para obtener la data de la petición post - lo que puse en la parte de Body en el postman
-        return{
-            bodysito //regresame el body de la peticion que hice en mi postman - patch en este caso
-        }
+    updateCar(@Param ('id',ParseUUIDPipe) id:string,//el metodo tambien puede recibir como parametro el id
+        @Body() updateCarDto: UpdateCarDto){//el parametro bodysito (lo llame asi pq quise xd) es para obtener la data de la petición post - lo que puse en la parte de Body en el postman
+        return  this.carsService.update(id, updateCarDto)//regresame el body de la peticion que hice en mi postman - patch en este caso
 
     }
 
     @Delete('/:id')
-    deleteCar (@Param('id', ParseIntPipe) id: number){//necesito el id de la vaina que eliminaré
-        return{
-            method:'delete',
-            id
-        }
+    deleteCar (@Param('id', ParseUUIDPipe) id: string){//necesito el id de la vaina que eliminaré
+        return this.carsService.delete(id);
 
     }
 
