@@ -134,5 +134,12 @@ export class CarsService {
     //pudieramos no retornar nada y que este metodo se encarge solo de eliminar y ya
     return this.cars;
   }
+
+  //sesion 62
+  fillCarsWithSeedData(cars:Car[]){
+
+    this.cars=cars;//esto en realidad lo inserto de una en una BD
+
+  }
   
 }
