@@ -6,7 +6,10 @@ import { CarsService } from './cars.service';
 
 @Module({
   controllers: [CarsController],
-  providers: [CarsService]//automatico haciendo (B)
+  providers: [CarsService],//automatico haciendo (B)
+  exports: [CarsService]//s63: como el modulo de seed utilizará elementos o servicios de este módulo debo configurar el exporte
+  //en el modulo origen que seria cars, y paso en la lista que cosas se van a exportar para que el seed lo use 
+  //asi arreglamos el error de la terminal
 })
 export class CarsModule {}
 
