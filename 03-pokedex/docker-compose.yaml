@@ -1,6 +1,6 @@
 # parecido a json pero trabaja con tabs para agrupar - Este archivo docker-compose.yaml configura un servicio de base de datos MongoDB en un contenedor Docker. Define cómo se debe ejecutar el contenedor, cómo se deben gestionar los puertos, y cómo se deben manejar los datos persistentes.
 
-# version: '3'
+ #version: '3'
 
   # Es la clave principal que agrupa todos los servicios que se van a ejecutar en el contenedor Docker. En este caso, solo tienes un servicio definido.
 services:
@@ -13,7 +13,7 @@ services:
       # Aquí defines el mapeo de puertos entre tu máquina y el contenedor. - 27017:27017 significa que el puerto 27017 de tu máquina host estará vinculado al puerto 27017 del contenedor. Esto permite que las aplicaciones en tu máquina local se conecten a la base de datos MongoDB.
     ports:
       # - 27017 puerto con el que trabaja Mongo 27017:27017 micompu-contenedor: puente que permite conectar mi compu con contenedor
-     - 27017:27107 
+     - 27017:27017
       # Esta sección define variables de entorno que se pasarán al contenedor al iniciar. En este caso, estás configurando la base de datos que MongoDB debe crear al iniciarse con MONGODB_DATABASE: nest-pokemon.
     environment:
       MONGODB_DATABASE: nest-pokemon
