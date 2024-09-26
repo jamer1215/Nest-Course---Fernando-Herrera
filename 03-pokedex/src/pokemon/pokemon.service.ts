@@ -113,7 +113,7 @@ export class PokemonService {
 
   //sesion 82  
   async remove(id: string) {
-    // const pokemon = await this.findOne(id);// si tenemos el pokemon
+    // const pokemon = await this.findOne(id);// si tenemos el pokemon (A)
     // await pokemon.deleteOne();//asi de facilito es
 
       // return {id};
@@ -122,8 +122,22 @@ export class PokemonService {
       
       //haciendolo así... qué pasa si por error mando un mongoid de un registro que ni existe?
       //en el postman no da error, tipo sale ok pero ajá la idea es que me digas mira bobo ese id no existe
-      const result = this.pokemonModel.findByIdAndDelete(id)
-      return result;
+      // const result = await this.pokemonModel.findByIdAndDelete(id)//se me olvido el await de s83 aca en s84
+
+      //manera 2 - validando el caso borde de tratar de eliminar algo que no existe
+
+      //const result = await this.pokemonModel.deleteOne({_id:id});//me pasa algo similar con lo de la serializacion de veces pasadas
+
+      const {deletedCount} = await this.pokemonModel.deleteOne({_id:id});
+      //esto quiere decir si no existe el pokemon - cantidad de registros eliminados
+      //lo hago asi para evitar hacer dos llamadas a la BD, por eso no descomente (A) para consultar primero si existia
+      if (deletedCount===0){
+
+        throw new BadRequestException(`Pokemon with id "${id}" not found`)
+
+      }
+
+      return ;
     }
 
   //como vimos en el update y create se nos presenta el error similar de querer hacer la transaccion con una ocurrencia repetida
