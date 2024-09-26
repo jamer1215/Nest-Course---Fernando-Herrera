@@ -111,9 +111,11 @@ export class PokemonService {
     
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pokemon`;
-  }
+  //sesion 82  
+  async remove(id: string) {
+    const pokemon = await this.findOne(id);// si tenemos el pokemon
+    await pokemon.deleteOne();//asi de facilito es
+    }
 
   //como vimos en el update y create se nos presenta el error similar de querer hacer la transaccion con una ocurrencia repetida
   //asi que mejor hagamos un metodo particular para eso y no repetir codigo
