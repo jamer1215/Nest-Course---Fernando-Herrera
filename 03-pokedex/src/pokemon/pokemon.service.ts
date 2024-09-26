@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Model } from 'mongoose';//s77
@@ -19,11 +19,21 @@ export class PokemonService {
 
     //hagamos inserciones ahora sin validaciones - cortico:
 
-    const pokemon =  await this.pokemonModel.create(createPokemonDto);//inserta los datos a la BD que quiero del pokemon
+    try {
 
-    return pokemon;//retorno el pokemon insertado
+      const pokemon =  await this.pokemonModel.create(createPokemonDto);//inserta los datos a la BD que quiero del pokemon
+
+      return pokemon;//retorno el pokemon insertado
+    } catch (error) {
+      if (error.code===11000){//ese codigo de error corresponde a registro duplicado
+        throw new BadRequestException(`Pokemon exists in db ${JSON.stringify(error.keyValue)}`)
+      }
+    console.log(error)
+    throw new InternalServerErrorException(`Can't create pokemon - check server logs`)//si es otro error de la BD
+
+
   }
-
+}
 //   haciendo el insert - post en el postman de:
 
 //   {
