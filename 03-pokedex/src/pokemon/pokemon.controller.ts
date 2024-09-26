@@ -14,14 +14,16 @@ export class PokemonController {
     return this.pokemonService.create(createPokemonDto);
   }
 
+  //s79 vamos a meternos acá 
   @Get()
   findAll() {
     return this.pokemonService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pokemonService.findOne(+id);
+    //es el termino de busqueda, no el id - S79
+  @Get(':termino')
+  findOne(@Param('termino') termino: string) {
+    return this.pokemonService.findOne(termino);
   }
 
   @Patch(':id')
