@@ -25,14 +25,11 @@ export class PokemonService {
 
       return pokemon;//retorno el pokemon insertado
     } catch (error) {
-      if (error.code===11000){//ese codigo de error corresponde a registro duplicado
-        throw new BadRequestException(`Pokemon exists in db ${JSON.stringify(error.keyValue)}`)
-      }
-    console.log(error)
-    throw new InternalServerErrorException(`Can't create pokemon - check server logs`)//si es otro error de la BD
+      this.handleExceptions(error)//mejor llamo al metodo que generaliza esta captura de errores.
 
 
-  }
+
+     }
 }
 //   haciendo el insert - post en el postman de:
 
@@ -85,11 +82,50 @@ export class PokemonService {
     return pokemon;
   }
 
-  update(id: number, updatePokemonDto: UpdatePokemonDto) {
-    return `This action updates a #${id} pokemon`;
+  //s80
+  async update(termino: string, updatePokemonDto: UpdatePokemonDto) {
+
+    //es el objeto o modelo en el cual puedo hacer una serie de cosas - no es el pokemon persé (?) - modelo de mongoose ofrece.
+
+    const pokemon = await this.findOne(termino);//si pasa de esta linea existe el pokemon
+    //si me mandan el nombre del pokemon con mayusculas demás y considerar que ese campo es opcional (si me lo mandan o no)
+    
+    try {
+      if (updatePokemonDto.name){
+        updatePokemonDto.name=updatePokemonDto.name.toLowerCase()
+  
+      }
+
+     await pokemon.updateOne(updatePokemonDto,{new:true})//regresamos el nuevo objeto - importante el new:true
+  
+    
+    } catch (error) {
+
+      this.handleExceptions(error)//mejor llamo al metodo que generaliza esta captura de errores.
+      
+    }
+
+    
+      return {...pokemon.toJSON(),...updatePokemonDto};//esto lo hago pq el updateOne lo que me hace es regresarme la vaina serializada en el postman se ve así, entonces pa q se vea bien bonito
+      //lo hice con el dto porque se supone que ese objeto posee la info que quiero actualizar sin usar lo del await pokemon.updateone...
+    
   }
 
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
   }
+
+  //como vimos en el update y create se nos presenta el error similar de querer hacer la transaccion con una ocurrencia repetida
+  //asi que mejor hagamos un metodo particular para eso y no repetir codigo
+
+  private handleExceptions(error:any){//recibe un error de cualquier tipo
+
+    if (error.code===11000){//ese codigo de error corresponde a registro duplicado
+      throw new BadRequestException(`Pokemon exists in db ${JSON.stringify(error.keyValue)}`)
+    }
+    console.log(error)
+    throw new InternalServerErrorException(`Can't create pokemon - check server logs`)//si es otro error de la BD
+
+  }
+
 }
