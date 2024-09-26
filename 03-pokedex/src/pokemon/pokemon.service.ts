@@ -1,13 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { Model } from 'mongoose';//s77
+import { Pokemon } from './entities/pokemon.entity';//s77
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class PokemonService {
-  create(createPokemonDto: CreatePokemonDto) {
+
+  constructor(
+    @InjectModel( Pokemon.name )//inyectar modelos en el servicio
+    private readonly pokemonModel: Model<Pokemon>//iny dependencia
+  ){}
+
+  //s77 usaremos el dto para usarlo para la insercion en la BD con el modelo ya listo y conectado
+  async create(createPokemonDto: CreatePokemonDto) {//las inserciones en la BD son asincronas
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase(); //pa pasarlo a minuscula
-    return createPokemonDto;
+
+    //hagamos inserciones ahora sin validaciones - cortico:
+
+    const pokemon =  await this.pokemonModel.create(createPokemonDto);//inserta los datos a la BD que quiero del pokemon
+
+    return pokemon;//retorno el pokemon insertado
   }
+
+//   haciendo el insert - post en el postman de:
+
+//   {
+//     "no": 2,
+//     "name": "Bulbasaur"
+// }
+
+// me retorna:
+
+// {
+//   "name": "bulbasaur",
+//   "no": 2,
+//   "_id": "66f4f2572aa5931ae8e9dd8b",
+//   "__v": 0
+// }
 
   findAll() {
     return `This action returns all pokemon`;
