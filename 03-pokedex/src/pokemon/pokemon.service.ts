@@ -113,8 +113,17 @@ export class PokemonService {
 
   //sesion 82  
   async remove(id: string) {
-    const pokemon = await this.findOne(id);// si tenemos el pokemon
-    await pokemon.deleteOne();//asi de facilito es
+    // const pokemon = await this.findOne(id);// si tenemos el pokemon
+    // await pokemon.deleteOne();//asi de facilito es
+
+      // return {id};
+
+      //manera 1 - s83 (funciona la eliminación bello):
+      
+      //haciendolo así... qué pasa si por error mando un mongoid de un registro que ni existe?
+      //en el postman no da error, tipo sale ok pero ajá la idea es que me digas mira bobo ese id no existe
+      const result = this.pokemonModel.findByIdAndDelete(id)
+      return result;
     }
 
   //como vimos en el update y create se nos presenta el error similar de querer hacer la transaccion con una ocurrencia repetida

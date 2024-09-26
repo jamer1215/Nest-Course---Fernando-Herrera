@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, ParseUUIDPipe} from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
 
 @Controller('pokemon')
 export class PokemonController {
@@ -32,8 +33,8 @@ export class PokemonController {
     return this.pokemonService.update(termino, updatePokemonDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':id')//no olvides que los pipes lo que hacen es transformarte una data - s83 TENEMOS Q CREAR UN PIPE TIPO ParseMongoID
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.pokemonService.remove(id);
   }
 }
