@@ -13,6 +13,10 @@ app.useGlobalPipes(
   new ValidationPipe({
   whitelist: true,
   forbidNonWhitelisted: true,
+  transform:true,//permiteme transformar el tipo de dato sobre la info que fluye por los DTOs
+  transformOptions:{
+    enableImplicitConversion:true,//la que busco para evitar que el limit=10 el 10 no se lea tipo string en el endpoint (s98)
+  }
   })
   );
 

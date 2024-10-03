@@ -19,8 +19,8 @@ export class PokemonController {
   //s79 vamos a meternos acá 
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {//esto para establecer los parámetros en el endpoint
-    console.log({paginationDto})
-    return this.pokemonService.findAll();
+    //console.log({paginationDto})
+    return this.pokemonService.findAll(paginationDto);
   }
 
     //es el termino de busqueda, no el id - S79
