@@ -6,6 +6,7 @@ import { InjectModel, Schema } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { PokeResponse } from './interfaces/poke-response.interface';
 import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
+import { AxiosAdapter } from 'src/common/httpadapters/axios.adapter';
 
 
 
@@ -14,9 +15,12 @@ export class SeedService {
 
   constructor(
     @InjectModel('Pokemon') private readonly pokemonModel: Model<Pokemon>, // Inyectamos el modelo - INSERT S93
+    private readonly http:AxiosAdapter
   ) {}
 
-  private readonly axios: AxiosInstance = axios;//instancia de axios, crea una dependencia en mi servicio - proyecto
+  //en s96 lo pasaremos al axios adapter:
+
+  //private readonly axios: AxiosInstance = axios;//instancia de axios, crea una dependencia en mi servicio - proyecto
   //hay varias formas de definir esto
 
   async executeSeed(){
@@ -25,7 +29,8 @@ export class SeedService {
 
     
     //hagamos las peticiones http mejor por axios
-    const {data} = await axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=650')//quiero es sacar la data
+    //S96: no desestructuraré mas la data más - hecho en axios (regresar solo respuesta)
+    const data = await this.http.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=650')//quiero es sacar la data
     //num pokemon y name del pokemon, desestructurando la vaina lo extraemos facil
 
     //solucion 2 para insertar varios registros de una sin esperar (await) uno por uno - S95
