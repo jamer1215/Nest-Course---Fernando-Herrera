@@ -48,7 +48,10 @@ export class PokemonService {
 // }
 
   findAll() {
-    return `This action returns all pokemon`;
+    return this.pokemonModel.find()
+    //paginacion - limites
+    .limit(5)//traelos de 5 en 5
+    .skip(5)//saltate los primeros 5
   }
 
   //s79 
