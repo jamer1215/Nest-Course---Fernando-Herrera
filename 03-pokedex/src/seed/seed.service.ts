@@ -25,11 +25,11 @@ export class SeedService {
 
     
     //hagamos las peticiones http mejor por axios
-    const {data} = await axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=10')//quiero es sacar la data
+    const {data} = await axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=650')//quiero es sacar la data
     //num pokemon y name del pokemon, desestructurando la vaina lo extraemos facil
 
-    //solucion 1 para insertar varios registros de una sin esperar (await) uno por uno - S95
-    const insertPromisesArray =[];
+    //solucion 2 para insertar varios registros de una sin esperar (await) uno por uno - S95
+    const pokemonToInsert:{name:string, no:number}[] =[];//arreglo de registros a insertar
     
          // comentado PARA HACER TAREA S93
      data.results.forEach(({name,url})=>{
@@ -38,14 +38,25 @@ export class SeedService {
       const no:number= +segments[segments.length-2]
 
 
-      const pokemon =  this.pokemonModel.create({name,no});//inserta los datos a la BD que quiero del pokemon
+      //const pokemon =  this.pokemonModel.create({name,no});//inserta los datos a la BD que quiero del pokemon
+
+      //en parte 1 me falto:
+      // insertPromisesArray.push(
+      //   this.pokemonModel.create({name,no})
+      // )
+
+      //parte 2 hacemos algo similar a lo que me faltó en parte 1:
+      pokemonToInsert.push({name, no});// [{name:bulbasaur, no:1},...]
+
 
 
     })
 
-    await Promise.all(insertPromisesArray);//para insertar todo la vaina simultaneo
-
-        
+     await this.pokemonModel.insertMany(pokemonToInsert)//insercion con muchos registros pero hace todo de uan - solucion 2
+     //equivalente a: INSERT INTO pokemons (name,no) VALUES
+     //...FILA 1
+     //...FILA 2
+     //...FILA N  
         return 'Seed ejecutado!';
       }
 
