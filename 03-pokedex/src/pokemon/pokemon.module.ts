@@ -12,8 +12,13 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
     MongooseModule.forFeature([{
       name: Pokemon.name,//sale de la extension del documento, no del atributo name como tal
       schema: PokemonSchema,
-    }])
+    }
+  ])
+  ],
 
+  //sesion 94 - resolucion tarea:
+  exports: [
+    MongooseModule//esto para usarlo en el seed module para usarlo en el service sin peo
   ]
 })
 export class PokemonModule {}
