@@ -1,0 +1,41 @@
+# parecido a json pero trabaja con tabs para agrupar - Este archivo docker-compose.yaml configura un servicio de base de datos MongoDB en un contenedor Docker. Define cómo se debe ejecutar el contenedor, cómo se deben gestionar los puertos, y cómo se deben manejar los datos persistentes.
+
+ #version: '3'
+
+  # Es la clave principal que agrupa todos los servicios que se van a ejecutar en el contenedor Docker. En este caso, solo tienes un servicio definido.
+services:
+    # Este es el nombre del servicio que has definido, que en este caso es una instancia de MongoDB. Puedes nombrarlo como desees, pero comúnmente se utiliza un nombre que represente la función del servicio.
+  db:
+      # Esta línea especifica la imagen de Docker que se usará para crear el contenedor. En este caso, estás utilizando la imagen oficial de MongoDB disponible en Docker Hub. Al especificar solo mongo, Docker buscará esta imagen en el registro predeterminado.
+    image: mongo
+      # Esta opción indica que el contenedor debe reiniciarse automáticamente en caso de que se detenga, lo que es útil para mantener el servicio siempre activo. Esto es especialmente útil para bases de datos y aplicaciones críticas
+    restart: always
+      # Aquí defines el mapeo de puertos entre tu máquina y el contenedor. - 27017:27017 significa que el puerto 27017 de tu máquina host estará vinculado al puerto 27017 del contenedor. Esto permite que las aplicaciones en tu máquina local se conecten a la base de datos MongoDB.
+    ports:
+      # - 27017 puerto con el que trabaja Mongo 27017:27017 micompu-contenedor: puente que permite conectar mi compu con contenedor
+     - 27017:27017
+      # Esta sección define variables de entorno que se pasarán al contenedor al iniciar. En este caso, estás configurando la base de datos que MongoDB debe crear al iniciarse con MONGODB_DATABASE: nest-pokemon.
+    environment:
+      MONGODB_DATABASE: nest-pokemon
+    # que pasaria si hago inserciones y borro ej el contenedor perderia la info en la BD y la idea es mantener la persistencia:
+    # algun espacio de disco duro = con lo que se trabaja la imagen de mi project
+    # Esta línea especifica un volumen persistente. ./mongo:/data/db significa que estás creando un volumen donde los datos de la base de datos se guardarán en la carpeta mongo en tu máquina local. Esto asegura que los datos no se pierdan cuando el contenedor se detenga o se elimine, ya que se almacenan fuera del contenedor.
+    volumes:
+      - ./mongo:/data/db
+
+# Ejecutamos el siguiente comando en la terminal: docker-compose up -d
+# El comando docker-compose up -d se utiliza para iniciar los servicios definidos en un archivo docker-compose.yaml. Aquí te explico sus componentes y su propósito:
+
+# Desglose del comando
+# docker-compose: Es una herramienta de Docker que permite definir y ejecutar aplicaciones multi-contenedor. Usando un archivo de configuración (normalmente llamado docker-compose.yaml), puedes especificar cómo deben ser ejecutados los contenedores, qué imágenes usar, cómo se deben comunicar entre sí, y otras configuraciones.
+
+# up: Este subcomando inicia y ejecuta todos los servicios definidos en el archivo docker-compose.yaml. Si los contenedores no están presentes (por ejemplo, si no has ejecutado el comando antes), docker-compose los creará automáticamente.
+
+# -d: Esta opción significa "detached mode" (modo separado). Cuando usas -d, los contenedores se ejecutan en segundo plano, lo que significa que puedes seguir usando tu terminal para otros comandos mientras los servicios están en ejecución. Sin esta opción, los registros de salida de los contenedores se mostrarían en la terminal y no podrías utilizarla hasta que los detuvieras.
+
+# ¿Para qué sirve docker-compose up -d?
+# Iniciar aplicaciones: Facilita el inicio de aplicaciones compuestas por múltiples servicios que pueden necesitar comunicarse entre sí.
+
+# Configuración simplificada: Usar un archivo docker-compose.yaml permite definir de manera centralizada todas las configuraciones necesarias (imágenes, volúmenes, redes, etc.) en lugar de ejecutar múltiples comandos de Docker para cada contenedor.
+
+# Facilidad de uso: Te permite gestionar el ciclo de vida de la aplicación (iniciar, detener, reiniciar) de manera más sencilla y rápida.
