@@ -21,22 +21,29 @@ export class SeedService {
 
   async executeSeed(){
 
+    await this.pokemonModel.deleteMany({})//sin condicion en () --> delete * from pokemons;
+
     
     //hagamos las peticiones http mejor por axios
     const {data} = await axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=10')//quiero es sacar la data
-       //num pokemon y name del pokemon, desestructurando la vaina lo extraemos facil
+    //num pokemon y name del pokemon, desestructurando la vaina lo extraemos facil
+
+    //solucion 1 para insertar varios registros de una sin esperar (await) uno por uno - S95
+    const insertPromisesArray =[];
     
          // comentado PARA HACER TAREA S93
-     data.results.forEach(async({name,url})=>{
+     data.results.forEach(({name,url})=>{
 
       const segments = url.split('/');//con esto veo que la salida puede verse...
       const no:number= +segments[segments.length-2]
 
 
-      const pokemon =  await this.pokemonModel.create({name,no});//inserta los datos a la BD que quiero del pokemon
+      const pokemon =  this.pokemonModel.create({name,no});//inserta los datos a la BD que quiero del pokemon
 
 
     })
+
+    await Promise.all(insertPromisesArray);//para insertar todo la vaina simultaneo
 
         
         return 'Seed ejecutado!';
